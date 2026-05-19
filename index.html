@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta
+      name="description"
+      content="Stackline Workflow Sprint — an original browser-based falling-block puzzle game."
+    />
+    <title>Stackline Workflow Sprint</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --bg-2: #1e293b;
+        --fg: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #38bdf8;
+        --danger: #f87171;
+        --grid: #233044;
+        --panel: rgba(15, 23, 42, 0.92);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-family:
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          Helvetica,
+          Arial,
+          sans-serif;
+        min-height: 100svh;
+        overflow-x: hidden;
+      }
+      #app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 12px;
+        min-height: 100svh;
+      }
+      header.app-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: min(100%, 720px);
+      }
+      header.app-header h1 {
+        font-size: clamp(1rem, 2.5vw, 1.4rem);
+        margin: 0;
+        letter-spacing: 0.02em;
+      }
+      header.app-header .actions {
+        display: flex;
+        gap: 6px;
+      }
+      button.btn {
+        background: var(--bg-2);
+        color: var(--fg);
+        border: 1px solid var(--grid);
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        min-height: 40px;
+        min-width: 40px;
+        touch-action: manipulation;
+      }
+      button.btn:hover,
+      button.btn:focus-visible {
+        border-color: var(--accent);
+        outline: none;
+      }
+      button.btn.primary {
+        background: var(--accent);
+        color: #0b1220;
+        border-color: var(--accent);
+        font-weight: 600;
+      }
+      .stage {
+        display: grid;
+        grid-template-columns: 110px minmax(0, 1fr) 140px;
+        gap: 10px;
+        width: min(100%, 720px);
+        align-items: start;
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .panel {
+        background: var(--bg-2);
+        border: 1px solid var(--grid);
+        border-radius: 10px;
+        padding: 8px;
+      }
+      .panel h2 {
+        margin: 0 0 6px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      .stat {
+        display: flex;
+        justify-content: space-between;
+        font-variant-numeric: tabular-nums;
+        font-size: 0.95rem;
+      }
+      .playfield-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 10 / 20;
+        background: #060a18;
+        border: 1px solid var(--grid);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      canvas#playfield {
+        display: block;
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+      }
+      canvas.mini {
+        width: 100%;
+        height: auto;
+        background: #060a18;
+        border-radius: 6px;
+        display: block;
+      }
+      .overlay {
+        position: absolute;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: var(--panel);
+        color: var(--fg);
+        text-align: center;
+        padding: 16px;
+        flex-direction: column;
+        gap: 12px;
+        z-index: 5;
+      }
+      .overlay.visible {
+        display: flex;
+      }
+      .overlay h2 {
+        margin: 0;
+        font-size: clamp(1.1rem, 3vw, 1.6rem);
+      }
+      .overlay p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 28ch;
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+      .overlay .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .help-content {
+        text-align: left;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        max-width: 38ch;
+        color: var(--fg);
+      }
+      .help-content code {
+        background: var(--grid);
+        padding: 1px 4px;
+        border-radius: 4px;
+      }
+      .help-content .disclaimer {
+        margin-top: 10px;
+        font-style: italic;
+        color: var(--muted);
+      }
+      .touch-controls {
+        display: none;
+        width: min(100%, 720px);
+        gap: 6px;
+        grid-template-columns: repeat(6, 1fr);
+        margin-top: 6px;
+      }
+      .touch-controls button {
+        padding: 14px 0;
+        font-size: 1rem;
+        min-height: 56px;
+      }
+      footer.app-footer {
+        font-size: 0.75rem;
+        color: var(--muted);
+        max-width: 60ch;
+        text-align: center;
+        padding: 4px 8px 16px;
+      }
+      @media (max-width: 640px) {
+        .stage {
+          grid-template-columns: 1fr;
+        }
+        .col.side {
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+        .col.side .panel {
+          flex: 1 1 45%;
+        }
+        .touch-controls {
+          display: grid;
+        }
+      }
+      @media (pointer: coarse) {
+        .touch-controls {
+          display: grid;
+        }
+      }
+      @media (max-width: 360px) {
+        #app {
+          padding: 6px;
+        }
+        .panel {
+          padding: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header class="app-header">
+        <h1>Stackline Workflow Sprint</h1>
+        <div class="actions">
+          <button class="btn" id="btn-help" type="button" aria-label="Open help panel">Help</button>
+          <button class="btn" id="btn-pause" type="button" aria-label="Pause game">Pause</button>
+          <button class="btn primary" id="btn-restart" type="button" aria-label="Restart game">
+            Restart
+          </button>
+        </div>
+      </header>
+
+      <section class="stage" aria-label="Game stage">
+        <div class="col side">
+          <div class="panel">
+            <h2>Hold</h2>
+            <canvas id="hold" class="mini" width="80" height="80" aria-label="Hold slot"></canvas>
+          </div>
+          <div class="panel">
+            <h2>Score</h2>
+            <div class="stat"><span>Score</span><span id="stat-score">0</span></div>
+            <div class="stat"><span>Level</span><span id="stat-level">1</span></div>
+            <div class="stat"><span>Lines</span><span id="stat-lines">0</span></div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="playfield-wrap">
+            <canvas id="playfield" width="200" height="400" aria-label="Playfield"></canvas>
+            <div class="overlay" id="overlay-start">
+              <h2>Ready to sprint?</h2>
+              <p>Stack the workflow shapes, clear lines, beat your high score.</p>
+              <div class="actions">
+                <button class="btn primary" id="btn-start" type="button">Start</button>
+                <button class="btn" id="btn-help-2" type="button">Help</button>
+              </div>
+            </div>
+            <div class="overlay" id="overlay-pause">
+              <h2>Paused</h2>
+              <p>Take a breath. Press Resume or hit P to continue.</p>
+              <div class="actions">
+                <button class="btn primary" id="btn-resume" type="button">Resume</button>
+              </div>
+            </div>
+            <div class="overlay" id="overlay-gameover">
+              <h2>Game over</h2>
+              <p>Stack overflow! Press Restart or R to try again.</p>
+              <div class="actions">
+                <button class="btn primary" id="btn-again" type="button">Play again</button>
+              </div>
+            </div>
+            <div class="overlay" id="overlay-help">
+              <h2>How to play</h2>
+              <div class="help-content">
+                <p>
+                  Pieces fall from the top — rotate and shift them so that complete rows clear.
+                  Gravity speeds up as you level up.
+                </p>
+                <p><strong>Keyboard:</strong></p>
+                <p>
+                  <code>←</code>/<code>→</code> move · <code>↓</code> soft drop ·
+                  <code>Space</code> hard drop · <code>↑</code>/<code>X</code> rotate CW ·
+                  <code>Z</code> rotate CCW · <code>Shift</code>/<code>C</code> hold ·
+                  <code>P</code>/<code>Esc</code> pause · <code>R</code> restart
+                </p>
+                <p><strong>Touch:</strong> on-screen buttons, or swipe on the playfield.</p>
+                <p class="disclaimer">
+                  Inspired by the genre; not affiliated with, endorsed by, or derived from any
+                  specific commercial product. All visuals and audio are original.
+                </p>
+              </div>
+              <div class="actions">
+                <button class="btn primary" id="btn-help-close" type="button">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col side">
+          <div class="panel">
+            <h2>Next</h2>
+            <canvas id="next" class="mini" width="100" height="320" aria-label="Next queue"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="touch-controls"
+        id="touch-controls"
+        aria-label="On-screen touch controls"
+      >
+        <button class="btn" data-action="left" type="button" aria-label="Move left">◀</button>
+        <button class="btn" data-action="right" type="button" aria-label="Move right">▶</button>
+        <button class="btn" data-action="soft" type="button" aria-label="Soft drop">▼</button>
+        <button class="btn" data-action="rotate" type="button" aria-label="Rotate">⟳</button>
+        <button class="btn" data-action="hard" type="button" aria-label="Hard drop">⤓</button>
+        <button class="btn" data-action="hold" type="button" aria-label="Hold piece">H</button>
+      </section>
+
+      <footer class="app-footer">
+        Stackline Workflow Sprint — original game, MIT licensed. Inspired by the genre; not
+        affiliated with any commercial product.
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
