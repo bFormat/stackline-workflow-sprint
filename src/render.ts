@@ -152,10 +152,21 @@ export function renderQueue(canvas: HTMLCanvasElement, state: GameState, slots =
   }
 }
 
+// Locale-aware integer formatter for HUD numbers. Using a fixed 'en-US'
+// locale keeps the thousand separator stable across user locales so the
+// score, level, and lines counters always read as "12,345" rather than a
+// dense "12345" once the player crosses four digits.
+const HUD_NUMBER_FORMAT = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+
+export function formatHudNumber(value: number): string {
+  if (!Number.isFinite(value)) return '0';
+  return HUD_NUMBER_FORMAT.format(Math.trunc(value));
+}
+
 export function renderHud(refs: RenderRefs, state: GameState) {
-  refs.score.textContent = String(state.score);
-  refs.level.textContent = String(state.level);
-  refs.lines.textContent = String(state.lines);
+  refs.score.textContent = formatHudNumber(state.score);
+  refs.level.textContent = formatHudNumber(state.level);
+  refs.lines.textContent = formatHudNumber(state.lines);
   refs.pauseBtn.textContent = state.status === 'paused' ? 'Resume' : 'Pause';
 }
 
