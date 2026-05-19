@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e1320" />
+    <meta name="description" content="Stackline Workflow Sprint — an original falling-block browser game." />
+    <title>Stackline Workflow Sprint</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <main class="app" aria-label="Stackline Workflow Sprint">
+      <section class="stage">
+        <aside class="rail rail-left" aria-label="Hold">
+          <h2 class="rail-title">Hold</h2>
+          <canvas id="hold" class="mini" width="120" height="120" aria-label="Held block preview"></canvas>
+          <div class="meta">
+            <div class="meta-row"><span class="meta-label">Score</span><span id="score" class="meta-value">0</span></div>
+            <div class="meta-row"><span class="meta-label">Level</span><span id="level" class="meta-value">1</span></div>
+            <div class="meta-row"><span class="meta-label">Lines</span><span id="lines" class="meta-value">0</span></div>
+          </div>
+          <div class="ctrl-buttons">
+            <button id="pauseBtn" type="button" class="ctrl-btn" aria-label="Pause or resume">Pause</button>
+            <button id="restartBtn" type="button" class="ctrl-btn" aria-label="Restart sprint">Restart</button>
+          </div>
+        </aside>
+        <div class="board-wrap">
+          <canvas id="board" class="board" width="300" height="600" aria-label="Game board"></canvas>
+          <div id="overlay" class="overlay" role="status" aria-live="polite">
+            <div class="overlay-card">
+              <h1 class="title">Stackline<br/>Workflow Sprint</h1>
+              <p class="subtitle">Press any key or tap to begin</p>
+              <ul class="legend">
+                <li><kbd>&larr;</kbd>/<kbd>&rarr;</kbd> shift</li>
+                <li><kbd>&uarr;</kbd> rotate</li>
+                <li><kbd>&darr;</kbd> soft drop</li>
+                <li><kbd>Space</kbd> hard drop</li>
+                <li><kbd>C</kbd> hold</li>
+                <li><kbd>P</kbd> pause</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <aside class="rail rail-right" aria-label="Next queue">
+          <h2 class="rail-title">Next</h2>
+          <canvas id="queue" class="mini queue" width="120" height="360" aria-label="Upcoming blocks"></canvas>
+          <p class="hint">Stack lines &mdash; sprint a fresh run, clear rows, climb levels.</p>
+        </aside>
+      </section>
+      <nav class="touchpad" aria-label="Touch controls">
+        <button data-action="left"  class="touch-btn" aria-label="Shift left">&larr;</button>
+        <button data-action="rotate" class="touch-btn" aria-label="Rotate">&#x21bb;</button>
+        <button data-action="right" class="touch-btn" aria-label="Shift right">&rarr;</button>
+        <button data-action="hold"  class="touch-btn touch-secondary" aria-label="Hold">Hold</button>
+        <button data-action="soft"  class="touch-btn" aria-label="Soft drop">&darr;</button>
+        <button data-action="hard"  class="touch-btn touch-accent" aria-label="Hard drop">Drop</button>
+      </nav>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
