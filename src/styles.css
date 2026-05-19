@@ -152,6 +152,22 @@ body {
   color: var(--ink-dim);
   font-size: 13px;
   letter-spacing: 0.08em;
+  line-height: 1.45;
+  max-width: 28ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Game-over polish: distinct title color and emphasized restart hint. */
+.overlay.is-over .title {
+  background: none;
+  -webkit-text-fill-color: var(--danger);
+  color: var(--danger);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.overlay.is-over .subtitle {
+  color: var(--ink);
+  font-weight: 600;
 }
 .legend {
   list-style: none;

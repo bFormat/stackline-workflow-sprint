@@ -159,22 +159,40 @@ export function renderHud(refs: RenderRefs, state: GameState) {
   refs.pauseBtn.textContent = state.status === 'paused' ? 'Resume' : 'Pause';
 }
 
+const DEFAULT_TITLE_HTML = 'Stackline<br>Workflow Sprint';
+const GAME_OVER_TITLE_HTML = 'Game Over';
+
 export function renderOverlay(overlay: HTMLElement, state: GameState) {
   let text: string | null = null;
   if (state.status === 'idle') text = 'idle';
   else if (state.status === 'paused') text = 'paused';
   else if (state.status === 'over') text = 'over';
 
+  // Reset state-specific classes so styling does not leak between states.
+  overlay.classList.remove('is-over', 'is-paused', 'is-idle');
+
   if (text === null) {
     overlay.classList.add('hidden');
     return;
   }
   overlay.classList.remove('hidden');
+  overlay.classList.add(`is-${text}`);
+
+  const title = overlay.querySelector('.title');
   const sub = overlay.querySelector('.subtitle');
+  if (title) {
+    const wantHtml = text === 'over' ? GAME_OVER_TITLE_HTML : DEFAULT_TITLE_HTML;
+    if (title.innerHTML !== wantHtml) title.innerHTML = wantHtml;
+  }
   if (sub) {
-    if (text === 'paused') sub.textContent = 'Paused — press P or tap Pause to resume';
-    else if (text === 'over') sub.textContent = 'Stack reached the top. Tap Restart for a fresh sprint.';
-    else sub.textContent = 'Press any key or tap to begin';
+    if (text === 'paused') {
+      sub.textContent = 'Paused — press P or tap Pause to resume';
+    } else if (text === 'over') {
+      sub.textContent =
+        'Stack reached the top. Press any key, tap here, or click Restart to start a new sprint.';
+    } else {
+      sub.textContent = 'Press any key or tap to begin';
+    }
   }
 }
 
