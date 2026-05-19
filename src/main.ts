@@ -4,6 +4,8 @@ import {
 } from './engine';
 import { renderAll, RenderRefs } from './render';
 import { attachKeyboard, attachTouch } from './input';
+import { mountPauseOverlay, PauseOverlayHandle } from './components/Pause/PauseOverlay';
+import { enhanceNextPiecePreview } from './components/NextPiece/NextPiece';
 
 function byId<T extends HTMLElement>(id: string): T {
   const el = document.getElementById(id);
@@ -26,8 +28,15 @@ function boot() {
 
   let state: GameState = createInitialState();
 
+  const boardWrap = refs.board.parentElement ?? document.body;
+  const pauseOverlay: PauseOverlayHandle = mountPauseOverlay({ host: boardWrap });
+  enhanceNextPiecePreview();
+
+  const syncPauseOverlay = () => pauseOverlay.setPaused(state.status === 'paused');
+
   const dispatch = (a: Action) => {
     state = reduce(state, a);
+    syncPauseOverlay();
     renderAll(refs, state);
   };
 
@@ -71,6 +80,7 @@ function boot() {
     const dt = Math.min(100, now - last);
     last = now;
     state = reduce(state, { type: 'TICK', dt });
+    syncPauseOverlay();
     renderAll(refs, state);
     requestAnimationFrame(loop);
   };

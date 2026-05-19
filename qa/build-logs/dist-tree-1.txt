@@ -1,0 +1,9 @@
+dist:
+total 4
+drwxr-xr-x 1 agent agent 4096 May 19 08:24 assets
+-rw-r--r-- 1 agent agent 3381 May 19 08:24 index.html
+
+dist/assets:
+total 24
+-rw-r--r-- 1 agent agent 12604 May 19 08:24 index-D172m5oq.js
+-rw-r--r-- 1 agent agent  5664 May 19 08:24 index-qB3-yBdr.css

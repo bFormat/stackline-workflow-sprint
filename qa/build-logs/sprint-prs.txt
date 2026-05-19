@@ -1,0 +1,12 @@
+[]
+# Placeholder. Manager replaces this contents at sprint cutoff with the
+# JSON output of:
+#   gh pr list --state merged \
+#     --search "merged:>=<OPEN_TS> merged:<=<CLOSE_TS>" \
+#     --json number,title,mergedAt,mergeCommit,headRefName,labels
+#
+# The verification script tests/qa/manager.sh treats the first non-comment
+# line as a JSON array of merged PRs and counts entries whose `labels`
+# array contains a "type:impl" element (or where the title starts with
+# "[impl]"). AC #1 (single implementation PR) passes only when that
+# count is exactly 1.
