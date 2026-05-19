@@ -1,0 +1,4 @@
+8:permissions:
+9:  contents: read
+10:  pages: write
+11:  id-token: write
