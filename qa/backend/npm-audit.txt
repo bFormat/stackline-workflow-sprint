@@ -1,0 +1,20 @@
+  vite  <=6.4.1
+  Depends on vulnerable versions of esbuild
+  node_modules/vite
+    @vitest/mocker  <=3.0.0-beta.4
+    Depends on vulnerable versions of vite
+    node_modules/@vitest/mocker
+      vitest  0.0.1 - 0.0.12 || 0.0.29 - 0.0.122 || 0.3.3 - 3.0.0-beta.4
+      Depends on vulnerable versions of @vitest/mocker
+      Depends on vulnerable versions of vite
+      Depends on vulnerable versions of vite-node
+      node_modules/vitest
+    vite-node  <=2.2.0-beta.2
+    Depends on vulnerable versions of vite
+    node_modules/vite-node
+
+
+5 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force

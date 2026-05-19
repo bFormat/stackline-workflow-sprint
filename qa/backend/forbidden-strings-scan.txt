@@ -1,0 +1,38 @@
+# Backend QA — forbidden trade-dress scan
+# Checked: TETR, tetrio, TETRIO, Tetrio, SRS, ARS
+# Scope:
+#   1. Shipped artifacts (dist/)            — must be clean.
+#   2. Source / tests / HTML                — only allowed inside disclaimer comments or the test's FORBIDDEN[] guardrail.
+#   3. Docs (README.md, ORIGINALITY.md)     — disclaimers reference the brand to assert non-affiliation.
+# Method: `grep -rln <term> --exclude-dir=...`
+
+== 1. Shipped artifacts (dist/) ==
+  TETR     : NO MATCH (clean)
+  tetrio   : NO MATCH (clean)
+  TETRIO   : NO MATCH (clean)
+  Tetrio   : NO MATCH (clean)
+  SRS      : NO MATCH (clean)
+  ARS      : NO MATCH (clean)
+
+== 2. Source / tests / HTML (excluding node_modules, dist, .git, qa) ==
+  TETR     : seen in:
+             /workspace/ORIGINALITY.md
+             /workspace/README.md
+             /workspace/src/engine.ts
+             /workspace/tests/overlay.test.ts
+  tetrio   : seen in:
+             /workspace/ORIGINALITY.md
+             /workspace/tests/overlay.test.ts
+  TETRIO   : seen in:
+             /workspace/tests/overlay.test.ts
+  Tetrio   : seen in:
+             /workspace/ORIGINALITY.md
+             /workspace/tests/overlay.test.ts
+
+== 3. Classification of every match found above ==
+  ORIGINALITY.md           : intentional — describes what is NOT copied.
+  README.md                : intentional — non-affiliation disclaimer.
+  src/engine.ts:3          : single-line comment "No TETR.IO content."
+  tests/overlay.test.ts:25 : FORBIDDEN = [...] guardrail asserting absence in overlay HTML.
+
+  → No occurrences in renderable / shipped output. PASS.
