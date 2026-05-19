@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0e1226" />
+    <meta name="description" content="Stackline Sprint — an original browser falling-block puzzle game." />
+    <title>Stackline Sprint</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="Stackline Sprint game">
+      <section class="panel panel-left" aria-label="Hold and stats">
+        <div class="slot" aria-label="Hold slot">
+          <h2 class="slot-title">Hold</h2>
+          <canvas id="holdCanvas" width="120" height="120" aria-label="Held piece preview"></canvas>
+        </div>
+        <dl class="stats">
+          <div><dt>Score</dt><dd id="score">0</dd></div>
+          <div><dt>Level</dt><dd id="level">1</dd></div>
+          <div><dt>Lines</dt><dd id="lines">0</dd></div>
+        </dl>
+        <button id="restartBtn" class="ctl" type="button">Restart</button>
+        <button id="pauseBtn" class="ctl" type="button">Pause</button>
+      </section>
+
+      <section class="board-wrap" aria-label="Playfield">
+        <canvas id="boardCanvas" width="300" height="600" aria-label="Stackline playfield"></canvas>
+        <div id="overlay" class="overlay hidden" role="status" aria-live="polite">
+          <p id="overlayText">Paused</p>
+        </div>
+      </section>
+
+      <section class="panel panel-right" aria-label="Up next">
+        <div class="slot">
+          <h2 class="slot-title">Next</h2>
+          <canvas id="nextCanvas" width="120" height="500" aria-label="Upcoming pieces"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <nav class="touch-pad" aria-label="Touch controls">
+      <button class="touch-btn" data-action="left" type="button" aria-label="Move left">◀</button>
+      <button class="touch-btn" data-action="rotateCcw" type="button" aria-label="Rotate counterclockwise">↺</button>
+      <button class="touch-btn" data-action="softDrop" type="button" aria-label="Soft drop">▼</button>
+      <button class="touch-btn" data-action="rotateCw" type="button" aria-label="Rotate clockwise">↻</button>
+      <button class="touch-btn" data-action="right" type="button" aria-label="Move right">▶</button>
+      <button class="touch-btn" data-action="hardDrop" type="button" aria-label="Hard drop">⤓</button>
+      <button class="touch-btn" data-action="hold" type="button" aria-label="Hold">H</button>
+    </nav>
+
+    <footer class="legal">
+      Stackline Sprint — original puzzle game. Not affiliated with or derived from any other commercial title.
+    </footer>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
