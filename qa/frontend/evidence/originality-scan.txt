@@ -1,0 +1,11 @@
+=== Trade-dress / SRS-letter scan (case-insensitive) ===
+Scope: source tree minus node_modules/dist/.git, excluding ORIGINALITY.md (audit doc).
+Hits are reference mentions only (audit references, comment, test FORBIDDEN list).
+
+./README.md:55:ORIGINALITY.md          # checklist confirming no TETR.IO content is copied
+./README.md:90:UI copy are original. The repository contains no TETR.IO names, assets,
+./src/engine.ts:3:// All naming/colors are original to this project. No TETR.IO content.
+./tests/overlay.test.ts:25:const FORBIDDEN = ['TETR.IO', 'tetrio', 'TETRIO', 'Tetrio', 'SRS', 'ARS'];
+
+=== Same scan against the built dist/ bundle ===
+No hits in dist/.
