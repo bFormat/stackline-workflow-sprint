@@ -1,0 +1,19 @@
+{
+  "name": "stackline-workflow-sprint",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Stackline Workflow Sprint - an original browser-based falling-block game.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "test": "vitest run",
+    "lint": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "5.4.5",
+    "vite": "5.2.11",
+    "vitest": "1.6.0"
+  }
+}
